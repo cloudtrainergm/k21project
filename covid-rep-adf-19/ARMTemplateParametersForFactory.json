@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "covid-rep-adf-19"
+		},
+		"ls_ablob_covidrepsa_connectionString": {
+			"value": ""
+		},
+		"ls_adls_covidrepdl_accountKey": {
+			"value": ""
+		},
+		"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/hbuddana/Azure_Data_Factory_COVID-19_Reporting/main/Datasets%20and%20Scripts/ecdc_data/hospital_admissions.csv"
+		},
+		"ls_adls_covidrepdl_properties_typeProperties_url": {
+			"value": "https://covidrepadls19.dfs.core.windows.net/"
+		}
+	}
+}
