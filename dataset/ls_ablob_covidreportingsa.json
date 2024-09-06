@@ -1,0 +1,108 @@
+{
+	"name": "ls_ablob_covidreportingsa",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ablob_covidrepsa",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "ds_ecdc_file_list.json",
+				"container": "configs"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"properties": {
+					"type": "object",
+					"properties": {
+						"linkedServiceName": {
+							"type": "object",
+							"properties": {
+								"referenceName": {
+									"type": "string"
+								},
+								"type": {
+									"type": "string"
+								}
+							}
+						},
+						"folder": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"type": "string"
+								}
+							}
+						},
+						"annotations": {
+							"type": "array"
+						},
+						"type": {
+							"type": "string"
+						},
+						"typeProperties": {
+							"type": "object",
+							"properties": {
+								"location": {
+									"type": "object",
+									"properties": {
+										"type": {
+											"type": "string"
+										},
+										"fileName": {
+											"type": "string"
+										},
+										"container": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						},
+						"schema": {
+							"type": "object",
+							"properties": {
+								"type": {
+									"type": "string"
+								},
+								"properties": {
+									"type": "object",
+									"properties": {
+										"sourceRelativeURL": {
+											"type": "object",
+											"properties": {
+												"type": {
+													"type": "string"
+												}
+											}
+										},
+										"sinkFileName": {
+											"type": "object",
+											"properties": {
+												"type": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"type": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
