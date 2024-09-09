@@ -49,7 +49,14 @@
 					"name": "AggDimDate"
 				},
 				{
-					"name": "join1"
+					"name": "joinwithdate"
+				},
+				{
+					"name": "PivotWeekly"
+				},
+				{
+					"name": "sortWeekly",
+					"description": "Sorting rows on columns 'reported_year_week, country'"
 				}
 			],
 			"scriptLines": [
@@ -58,7 +65,7 @@
 				"          indicator as string,",
 				"          date as date,",
 				"          year_week as string,",
-				"          value as string,",
+				"          value as integer,",
 				"          source as string,",
 				"          url as string",
 				"     ),",
@@ -102,7 +109,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectReqdFields",
-				"SelectReqdFields, DimDateSource lookup(ERROR_FUNCTION('') == ERROR_FUNCTION(''),",
+				"SelectReqdFields, CountrySource lookup(SelectReqdFields@country == CountrySource@country,",
 				"     multiple: false,",
 				"     pickup: 'any',",
 				"     broadcast: 'auto')~> LookupCountry",
@@ -115,11 +122,12 @@
 				"          country_code_2_digit,",
 				"          country_code_3_digit,",
 				"          population,",
-				"          continent",
+				"          continent,",
+				"          country",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectreqdfields2",
-				"selectreqdfields2 split(indicator == 'Weekly new hospital admission per 100k' || indicator == 'Weekly ICU admission per 100k',",
+				"selectreqdfields2 split(indicator == 'Weekly new hospital admissions per 100k' || indicator == 'Weekly new ICU admissions per 100k',",
 				"     disjoint: false) ~> Condition@(Weekly, Daily)",
 				"DimDateSource derive(ecdc_year_week = year+'-W'+lpad(week_of_year,2,'0')) ~> DeriveECDCYearWeek",
 				"DeriveECDCYearWeek aggregate(groupBy(ecdc_year_week),",
@@ -129,7 +137,20 @@
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1"
+				"     broadcast: 'auto')~> joinwithdate",
+				"joinwithdate pivot(groupBy(country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          population,",
+				"          year_week,",
+				"          source,",
+				"          week_start_date,",
+				"          week_end_date),",
+				"     pivotBy(indicator, ['Weekly new hospital admissions per 100k', 'Weekly new ICU admissions per 100k']),",
+				"     count = sum(value),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> PivotWeekly",
+				"PivotWeekly sort(asc(year_week, true),",
+				"     asc(ERROR_FUNCTION(''), true)) ~> sortWeekly"
 			]
 		}
 	}
