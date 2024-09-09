@@ -27,7 +27,15 @@
 					"name": "CountrySource"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_processed_hospital_admission_weekly",
+						"type": "DatasetReference"
+					},
+					"name": "WeeklySink"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectReqdFields",
@@ -57,6 +65,9 @@
 				{
 					"name": "sortWeekly",
 					"description": "Sorting rows on columns 'reported_year_week, country'"
+				},
+				{
+					"name": "selectweekly"
 				}
 			],
 			"scriptLines": [
@@ -65,7 +76,7 @@
 				"          indicator as string,",
 				"          date as date,",
 				"          year_week as string,",
-				"          value as integer,",
+				"          value as double,",
 				"          source as string,",
 				"          url as string",
 				"     ),",
@@ -122,8 +133,8 @@
 				"          country_code_2_digit,",
 				"          country_code_3_digit,",
 				"          population,",
-				"          continent,",
-				"          country",
+				"          country = SelectReqdFields@country,",
+				"          country = CountrySource@country",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectreqdfields2",
@@ -144,13 +155,45 @@
 				"          year_week,",
 				"          source,",
 				"          week_start_date,",
-				"          week_end_date),",
+				"          week_end_date,",
+				"          country),",
 				"     pivotBy(indicator, ['Weekly new hospital admissions per 100k', 'Weekly new ICU admissions per 100k']),",
 				"     count = sum(value),",
 				"     columnNaming: '$N$V',",
 				"     lateral: true) ~> PivotWeekly",
-				"PivotWeekly sort(asc(year_week, true),",
-				"     asc(ERROR_FUNCTION(''), true)) ~> sortWeekly"
+				"PivotWeekly sort(desc(year_week, true),",
+				"     asc(country, true)) ~> sortWeekly",
+				"sortWeekly select(mapColumn(",
+				"          country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          population,",
+				"          year_week,",
+				"          source,",
+				"          week_start_date,",
+				"          week_end_date,",
+				"          new_hospital_occupancy_count = {countWeekly new hospital admissions per 100k},",
+				"          new_icu_occupancy_count = {countWeekly new ICU admissions per 100k},",
+				"          country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectweekly",
+				"selectweekly sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          country_code as string,",
+				"          population as string,",
+				"          indicator as string,",
+				"          daily_count as string,",
+				"          country as string,",
+				"          country_code_2_digit as string,",
+				"          country_code_3_digit as string,",
+				"          continent as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> WeeklySink"
 			]
 		}
 	}
