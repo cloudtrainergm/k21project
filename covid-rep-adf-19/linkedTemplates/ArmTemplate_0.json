@@ -139,7 +139,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_process_population_data - activity run')]",
+			"name": "[concat(parameters('factoryName'), '/pl_process_population_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -172,6 +172,63 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/demodbricks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/cases_deaths')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_covid_db",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "country",
+						"type": "varchar"
+					},
+					{
+						"name": "country_code_2_digit",
+						"type": "varchar"
+					},
+					{
+						"name": "country_code_3_digit",
+						"type": "varchar"
+					},
+					{
+						"name": "population",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "cases_count",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "deaths_count",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "reported_date",
+						"type": "date"
+					},
+					{
+						"name": "source",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "covid_reporting_schema",
+					"table": "hospital_admissions_daily"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_covid_db')]"
 			]
 		},
 		{
@@ -615,7 +672,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "population_age_tsv",
+						"fileName": "population_age_tsv.tsv",
 						"folderPath": "population",
 						"fileSystem": "raw"
 					}
@@ -639,6 +696,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": "DailyData.csv",
 						"fileSystem": "processed"
 					},
 					"columnDelimiter": ",",
@@ -646,7 +704,40 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "country",
+						"type": "String"
+					},
+					{
+						"name": "country_code_2_digit",
+						"type": "String"
+					},
+					{
+						"name": "country_code_3_digit",
+						"type": "String"
+					},
+					{
+						"name": "population",
+						"type": "String"
+					},
+					{
+						"name": "reported_date",
+						"type": "String"
+					},
+					{
+						"name": "source",
+						"type": "String"
+					},
+					{
+						"name": "hospital_occupancy_count",
+						"type": "String"
+					},
+					{
+						"name": "icu_occupancy_count",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls_covidrepdl')]"
@@ -666,35 +757,16 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "hospital_admissions_weekly.csv",
+						"fileName": "WeeklyData.csv",
 						"fileSystem": "processed"
 					},
 					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
-					{
-						"name": "country_code",
-						"type": "String"
-					},
-					{
-						"name": "population",
-						"type": "String"
-					},
-					{
-						"name": "indicator",
-						"type": "String"
-					},
-					{
-						"name": "daily_count",
-						"type": "String"
-					},
-					{
-						"name": "country",
-						"type": "String"
-					},
 					{
 						"name": "country_code_2_digit",
 						"type": "String"
@@ -704,7 +776,35 @@
 						"type": "String"
 					},
 					{
-						"name": "continent",
+						"name": "population",
+						"type": "String"
+					},
+					{
+						"name": "year_week",
+						"type": "String"
+					},
+					{
+						"name": "source",
+						"type": "String"
+					},
+					{
+						"name": "week_start_date",
+						"type": "String"
+					},
+					{
+						"name": "week_end_date",
+						"type": "String"
+					},
+					{
+						"name": "hospital_occupancy_count",
+						"type": "String"
+					},
+					{
+						"name": "icu_occupancy_count",
+						"type": "String"
+					},
+					{
+						"name": "country",
 						"type": "String"
 					}
 				]
@@ -823,71 +923,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_covidrepsa')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_adls_covidreportingdl')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls_covidrepdl",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "ecdc",
-						"fileSystem": "raw"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "country",
-						"type": "String"
-					},
-					{
-						"name": "country_code",
-						"type": "String"
-					},
-					{
-						"name": "continent",
-						"type": "String"
-					},
-					{
-						"name": "population",
-						"type": "String"
-					},
-					{
-						"name": "indicator",
-						"type": "String"
-					},
-					{
-						"name": "daily_count",
-						"type": "String"
-					},
-					{
-						"name": "date",
-						"type": "String"
-					},
-					{
-						"name": "rate_14_day",
-						"type": "String"
-					},
-					{
-						"name": "source",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls_covidrepdl')]"
 			]
 		}
 	]
