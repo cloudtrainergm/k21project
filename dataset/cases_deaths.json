@@ -46,7 +46,7 @@
 		],
 		"typeProperties": {
 			"schema": "covid_reporting_schema",
-			"table": "hospital_admissions_daily"
+			"table": "testing"
 		}
 	}
 }
