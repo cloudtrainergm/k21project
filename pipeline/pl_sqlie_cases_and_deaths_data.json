@@ -5,6 +5,8 @@
 			{
 				"name": "Copy cases and deaths",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -235,12 +237,24 @@
 							},
 							{
 								"source": {
+									"name": "week_start_date",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "reported_date",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
 									"name": "hospital_occupancy_count",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "cases_count",
+									"name": "hospital_occupancy_count",
 									"type": "Int64",
 									"physicalType": "bigint"
 								}
@@ -252,21 +266,9 @@
 									"physicalType": "String"
 								},
 								"sink": {
-									"name": "deaths_count",
+									"name": "icu_occupancy_count",
 									"type": "Int64",
 									"physicalType": "bigint"
-								}
-							},
-							{
-								"source": {
-									"name": "reported_date",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "reported_date",
-									"type": "DateTime",
-									"physicalType": "date"
 								}
 							},
 							{
