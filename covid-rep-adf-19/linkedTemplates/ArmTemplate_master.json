@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls_covidrepdl'"
 		},
+		"ls_db_covid_cluster_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_db_covid_cluster'"
+		},
+		"demodbricks_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'demodbricks'"
+		},
 		"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/hbuddana/Azure_Data_Factory_COVID-19_Reporting/main/Datasets%20and%20Scripts/ecdc_data/hospital_admissions.csv"
@@ -22,6 +30,10 @@
 		"ls_adls_covidrepdl_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://covidrepadls19.dfs.core.windows.net/"
+		},
+		"demodbricks_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0909-184456-hbk2yjve"
 		},
 		"containerUri": {
 			"type": "string",
@@ -56,11 +68,20 @@
 					"ls_adls_covidrepdl_accountKey": {
 						"value": "[parameters('ls_adls_covidrepdl_accountKey')]"
 					},
+					"ls_db_covid_cluster_accessToken": {
+						"value": "[parameters('ls_db_covid_cluster_accessToken')]"
+					},
+					"demodbricks_accessToken": {
+						"value": "[parameters('demodbricks_accessToken')]"
+					},
 					"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
 						"value": "[parameters('Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url')]"
 					},
 					"ls_adls_covidrepdl_properties_typeProperties_url": {
 						"value": "[parameters('ls_adls_covidrepdl_properties_typeProperties_url')]"
+					},
+					"demodbricks_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('demodbricks_properties_typeProperties_existingClusterId')]"
 					}
 				}
 			},
