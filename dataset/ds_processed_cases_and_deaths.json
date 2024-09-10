@@ -17,6 +17,39 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "country",
+				"type": "String"
+			},
+			{
+				"name": "country_code_2_digit",
+				"type": "String"
+			},
+			{
+				"name": "country_code_3_digit",
+				"type": "String"
+			},
+			{
+				"name": "population",
+				"type": "String"
+			},
+			{
+				"name": "reported_date",
+				"type": "String"
+			},
+			{
+				"name": "source",
+				"type": "String"
+			},
+			{
+				"name": "hospital_occupancy_count",
+				"type": "String"
+			},
+			{
+				"name": "icu_occupancy_count",
+				"type": "String"
+			}
+		]
 	}
 }
