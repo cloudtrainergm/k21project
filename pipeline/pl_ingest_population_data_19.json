@@ -153,6 +153,8 @@
 						{
 							"name": "Delete Source File",
 							"type": "Delete",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Copy Population Data",
