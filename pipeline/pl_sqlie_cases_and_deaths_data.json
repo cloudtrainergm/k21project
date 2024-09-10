@@ -85,30 +85,6 @@
 							},
 							{
 								"source": {
-									"name": "hospital_occupancy_count",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "cases_count",
-									"type": "Int64",
-									"physicalType": "bigint"
-								}
-							},
-							{
-								"source": {
-									"name": "icu_occupancy_count",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "deaths_count",
-									"type": "Int64",
-									"physicalType": "bigint"
-								}
-							},
-							{
-								"source": {
 									"name": "reported_date",
 									"type": "String",
 									"physicalType": "String"
