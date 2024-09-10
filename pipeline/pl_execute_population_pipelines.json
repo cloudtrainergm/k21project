@@ -35,7 +35,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "pl_process_population_data - activity run",
+						"referenceName": "pl_process_population_data",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
